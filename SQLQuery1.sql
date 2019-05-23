@@ -1,0 +1,1 @@
+﻿INSERT INTO Abiturient(Фамилия)VALUES('test')
