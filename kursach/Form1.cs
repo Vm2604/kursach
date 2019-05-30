@@ -16,7 +16,7 @@ namespace kursach
         SqlConnection sqlConnection;
         public Form1()
         {
-           
+
             InitializeComponent();
         }
 
@@ -31,7 +31,7 @@ namespace kursach
             try
             {
                 sqlReader = await command.ExecuteReaderAsync();//считывание таблицы
-                while(await sqlReader.ReadAsync())
+                while (await sqlReader.ReadAsync())
                 {
                     listBox1.Items.Add(Convert.ToString(sqlReader["Id"]));
                     listBox2.Items.Add(Convert.ToString(sqlReader["Number"]));
@@ -43,11 +43,12 @@ namespace kursach
                     listBox8.Items.Add(Convert.ToString(sqlReader["Examsecond"]));
                     listBox9.Items.Add(Convert.ToString(sqlReader["Examthird"]));
                     listBox10.Items.Add(Convert.ToString(sqlReader["Atestat"]));
+
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message.ToString(), ex.Source.ToString(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
@@ -65,11 +66,11 @@ namespace kursach
         {
 
         }
-       
+
         private async void textBox1_TextChanged(object sender, EventArgs e)
         {
-          
-            
+
+
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -112,9 +113,20 @@ namespace kursach
 
         }
 
-        
 
+        //отключение от таблицы..............................................................................................................................................................................................
         private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (sqlConnection != null && sqlConnection.State != ConnectionState.Closed)
+            {
+                sqlConnection.Close();
+
+            }
+        }
+
+
+
+        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (sqlConnection != null && sqlConnection.State != ConnectionState.Closed)
             {
@@ -122,17 +134,9 @@ namespace kursach
             }
         }
 
-        private void выходToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (sqlConnection != null && sqlConnection.State !=ConnectionState.Closed)
-            {
-                sqlConnection.Close();
-            }
-        }
-
         private async void textBox2_TextChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
@@ -164,7 +168,7 @@ namespace kursach
         {
 
         }
-        //вывод таблицы
+        //обновление таблицы.............................................................................................................................................................................................
         private async void обновитьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             listBox1.Items.Clear();
@@ -206,27 +210,31 @@ namespace kursach
                     sqlReader.Close();
             }
         }
-      //ДОбавить
+        //Добавить
         private async void button2_Click(object sender, EventArgs e)
         {
             if (label22.Visible)
                 label22.Visible = false;
-            if (!string.IsNullOrEmpty(textBox3.Text) && !string.IsNullOrWhiteSpace(textBox3.Text)
-                )
+            if (!string.IsNullOrEmpty(textBox1.Text) && !string.IsNullOrWhiteSpace(textBox1.Text) &&
+                !string.IsNullOrEmpty(textBox2.Text) && !string.IsNullOrWhiteSpace(textBox2.Text) &&
+                !string.IsNullOrEmpty(textBox3.Text) && !string.IsNullOrWhiteSpace(textBox3.Text) &&
+                !string.IsNullOrEmpty(textBox4.Text) && !string.IsNullOrWhiteSpace(textBox4.Text) &&
+                !string.IsNullOrEmpty(textBox5.Text) && !string.IsNullOrWhiteSpace(textBox5.Text) &&
+                !string.IsNullOrEmpty(textBox6.Text) && !string.IsNullOrWhiteSpace(textBox6.Text) &&
+                !string.IsNullOrEmpty(textBox7.Text) && !string.IsNullOrWhiteSpace(textBox7.Text) &&
+                !string.IsNullOrEmpty(textBox8.Text) && !string.IsNullOrWhiteSpace(textBox8.Text) &&
+                !string.IsNullOrEmpty(textBox9.Text) && !string.IsNullOrWhiteSpace(textBox9.Text))
             {
                 SqlCommand command = new SqlCommand("INSERT INTO [Abiturient](Firstname,Secondname,Thirdname,Number,Examfirst,Examsecond,Examthird,Atestat,Date)VALUES(@Firstname,@Secondname,@Thirdname,@Number,@Examfirst,@Examsecond,@Examthird,@Atestat,@Date)", sqlConnection);
-                command.Parameters.AddWithValue("Firstname",textBox3.Text);
+                command.Parameters.AddWithValue("Firstname", textBox3.Text);
                 command.Parameters.AddWithValue("Secondname", textBox2.Text);
                 command.Parameters.AddWithValue("Thirdname", textBox4.Text);
                 command.Parameters.AddWithValue("Number", textBox1.Text);
                 command.Parameters.AddWithValue("Examfirst", textBox7.Text);
                 command.Parameters.AddWithValue("Examsecond", textBox9.Text);
                 command.Parameters.AddWithValue("Examthird", textBox8.Text);
-                command.Parameters.AddWithValue("Atestat", textBox6.Text);
                 command.Parameters.AddWithValue("Date", textBox5.Text);
-
-
-
+                command.Parameters.AddWithValue("Atestat", textBox6.Text);
                 await command.ExecuteNonQueryAsync();
             }
             //ошибка при не заполненных полях
@@ -236,54 +244,25 @@ namespace kursach
                 label22.Text = "Поля не заполенны";
             }
         }
-        // изменить
-        private  async void button1_Click(object sender, EventArgs e)
+        //Конец добавления
+
+        private async void button1_Click(object sender, EventArgs e)
         {
-            if (label23.Visible)
-                label23.Visible = false;
-            if (!string.IsNullOrEmpty(textBox20.Text) && !string.IsNullOrWhiteSpace(textBox20.Text)&&(
-                !string.IsNullOrEmpty(textBox18.Text) && !string.IsNullOrWhiteSpace(textBox18.Text)||
-                !string.IsNullOrEmpty(textBox17.Text) && !string.IsNullOrWhiteSpace(textBox17.Text) ||
-                !string.IsNullOrEmpty(textBox16.Text) && !string.IsNullOrWhiteSpace(textBox16.Text) ||
-                !string.IsNullOrEmpty(textBox15.Text) && !string.IsNullOrWhiteSpace(textBox15.Text) ||
-                !string.IsNullOrEmpty(textBox14.Text) && !string.IsNullOrWhiteSpace(textBox14.Text) ||
-                !string.IsNullOrEmpty(textBox13.Text) && !string.IsNullOrWhiteSpace(textBox13.Text) ||
-                !string.IsNullOrEmpty(textBox12.Text) && !string.IsNullOrWhiteSpace(textBox12.Text) ||
-                !string.IsNullOrEmpty(textBox11.Text) && !string.IsNullOrWhiteSpace(textBox11.Text) ||
-                !string.IsNullOrEmpty(textBox10.Text) && !string.IsNullOrWhiteSpace(textBox10.Text)))
-            {
-                SqlCommand command = new SqlCommand("UPDATE [Abiturient] SET [Firstname]=@Firstname ,[Secondname]=@Secondname  WHERE[Id]=@Id",sqlConnection);
-                command.Parameters.AddWithValue("Id",textBox20.Text);
-                command.Parameters.AddWithValue("Firstname", textBox16.Text);
-                command.Parameters.AddWithValue("Secondname", textBox17.Text);
 
-
-
-                await command.ExecuteNonQueryAsync();
-            }
-            else if(string.IsNullOrEmpty(textBox20.Text) && string.IsNullOrWhiteSpace(textBox20.Text))
-            {
-                label23.Visible = true;
-                label23.Text = "Поле индефикатора не заполненно";
-            }
-            else
-            {
-                label23.Visible = true;
-                label23.Text = "Измените хотя бы одно из полей";
-            }
         }
 
         private void label23_Click(object sender, EventArgs e)
         {
 
         }
-        //удаление.
+        //удаление.....................................................................................................................................................................................................
         private async void button3_Click(object sender, EventArgs e)
+
         {
 
             if (label24.Visible)
                 label24.Visible = false;
-            if(!string.IsNullOrEmpty(textBox21.Text) && !string.IsNullOrWhiteSpace(textBox21.Text))
+            if (!string.IsNullOrEmpty(textBox21.Text) && !string.IsNullOrWhiteSpace(textBox21.Text))
             {
                 SqlCommand command = new SqlCommand("DELETE FROM[Abiturient] WHERE[Id]=@Id", sqlConnection);
                 command.Parameters.AddWithValue("Id", textBox21.Text);
@@ -293,14 +272,17 @@ namespace kursach
             {
                 label24.Visible = true;
                 label24.Text = "Введите Id";
+
+
             }
         }
-
-        private void listBox10_SelectedIndexChanged(object sender, EventArgs e)
+        //Удаление абитуриентов с баллом атестата ниже 8(заданного)
+        private async void button1_Click_1(object sender, EventArgs e)
         {
-
+            SqlCommand command = new SqlCommand("DELETE FROM[Abiturient] WHERE[Atestat]<8", sqlConnection);
+            await command.ExecuteNonQueryAsync();
         }
-
+        //конец удаления
         private void label25_Click(object sender, EventArgs e)
         {
 
@@ -310,5 +292,354 @@ namespace kursach
         {
 
         }
+        //ИЗМЕНИТЬ!!!..............................................................................................................................................................................
+        //изменение.Фамилия.........................................................................................................................................................................................................
+        private async void button4_Click(object sender, EventArgs e)
+        {
+            if (label23.Visible)
+                label23.Visible = false;
+            if (!string.IsNullOrEmpty(textBox20.Text) && !string.IsNullOrWhiteSpace(textBox20.Text) &&
+                !string.IsNullOrEmpty(textBox17.Text) && !string.IsNullOrWhiteSpace(textBox17.Text) && (textBox23.Text == textBox19.Text)
+                && !string.IsNullOrEmpty(textBox19.Text) && !string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                SqlCommand command = new SqlCommand("UPDATE [Abiturient] SET [Secondname]=@Secondname  WHERE[Id]=@Id", sqlConnection);
+                command.Parameters.AddWithValue("Id", textBox20.Text);
+                command.Parameters.AddWithValue("Secondname", textBox17.Text);
+                await command.ExecuteNonQueryAsync();
+            }
+            else if (string.IsNullOrEmpty(textBox20.Text) || string.IsNullOrWhiteSpace(textBox20.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле индефикатора не заполненно";
+            }
+            else if (string.IsNullOrEmpty(textBox17.Text) || string.IsNullOrWhiteSpace(textBox17.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле (Фамилия) не заполненно";
+            }
+            else if (textBox23.Text != textBox19.Text)
+            {
+                label23.Visible = true;
+                label23.Text = "Неверный пароль";
+            }
+            else if (string.IsNullOrEmpty(textBox19.Text) || string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Введите пароль";
+            }
+        }
+        //изменение.Имя.......................................................................................................................................................................................................................
+        private async void button5_Click(object sender, EventArgs e)
+        {
+            if (label23.Visible)
+                label23.Visible = false;
+            if (!string.IsNullOrEmpty(textBox20.Text) && !string.IsNullOrWhiteSpace(textBox20.Text) &&
+                !string.IsNullOrEmpty(textBox16.Text) && !string.IsNullOrWhiteSpace(textBox16.Text) && (textBox23.Text == textBox19.Text)
+                && !string.IsNullOrEmpty(textBox19.Text) && !string.IsNullOrWhiteSpace(textBox19.Text)
+                && !string.IsNullOrEmpty(textBox19.Text) && !string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                SqlCommand command = new SqlCommand("UPDATE [Abiturient] SET [Firstname]=@Firstname  WHERE[Id]=@Id", sqlConnection);
+                command.Parameters.AddWithValue("Id", textBox20.Text);
+                command.Parameters.AddWithValue("Firstname", textBox16/*Ввод имени*/.Text);
+                await command.ExecuteNonQueryAsync();
+            }
+            else if (string.IsNullOrEmpty(textBox20.Text) || string.IsNullOrWhiteSpace(textBox20.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле индефикатора не заполненно";
+            }
+            else if (string.IsNullOrEmpty(textBox16.Text) || string.IsNullOrWhiteSpace(textBox16.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле (Имя) не заполненно";
+            }
+            else if (textBox23.Text != textBox19.Text)
+            {
+                label23.Visible = true;
+                label23.Text = "Неверный пароль";
+            }
+            else if (string.IsNullOrEmpty(textBox19.Text) || string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Введите пароль";
+            }
+        }
+        //изменение.Отчество..........................................................................................................................................................................................................
+        private async void button6_Click(object sender, EventArgs e)
+        {
+            if (label23.Visible)
+                label23.Visible = false;
+            if (!string.IsNullOrEmpty(textBox20.Text) && !string.IsNullOrWhiteSpace(textBox20.Text) &&
+                !string.IsNullOrEmpty(textBox15.Text) && !string.IsNullOrWhiteSpace(textBox15.Text) && (textBox23.Text == textBox19.Text)
+                && !string.IsNullOrEmpty(textBox19.Text) && !string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                SqlCommand command = new SqlCommand("UPDATE [Abiturient] SET [Thirdname]=@Thirdname WHERE[Id]=@Id", sqlConnection);
+                command.Parameters.AddWithValue("Id", textBox20.Text);
+                command.Parameters.AddWithValue("Thirdname", textBox15.Text);
+                await command.ExecuteNonQueryAsync();
+            }
+            else if (string.IsNullOrEmpty(textBox20.Text) || string.IsNullOrWhiteSpace(textBox20.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле индефикатора не заполненно";
+            }
+            else if (string.IsNullOrEmpty(textBox15.Text) || string.IsNullOrWhiteSpace(textBox15.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле (Отчество) не заполненно";
+            }
+            else if (textBox23.Text != textBox19.Text)
+            {
+                label23.Visible = true;
+                label23.Text = "Неверный пароль";
+            }
+            else if (string.IsNullOrEmpty(textBox19.Text) || string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Введите пароль";
+            }
+        }
+        //Изменение.Дата рождения.......................................................................................................................................................................................................
+        private async void button7_Click(object sender, EventArgs e)
+        {
+            if (label23.Visible)
+                label23.Visible = false;
+            if (!string.IsNullOrEmpty(textBox20.Text) && !string.IsNullOrWhiteSpace(textBox20.Text) &&
+                !string.IsNullOrEmpty(textBox14.Text) && !string.IsNullOrWhiteSpace(textBox14.Text) && (textBox23.Text == textBox19.Text)
+                && !string.IsNullOrEmpty(textBox19.Text) && !string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                SqlCommand command = new SqlCommand("UPDATE [Abiturient] SET [Date]=@Date WHERE[Id]=@Id", sqlConnection);
+                command.Parameters.AddWithValue("Id", textBox20.Text);
+                command.Parameters.AddWithValue("Date", textBox14.Text);
+                await command.ExecuteNonQueryAsync();
+            }
+            else if (string.IsNullOrEmpty(textBox20.Text) || string.IsNullOrWhiteSpace(textBox20.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле индефикатора не заполненно";
+            }
+            else if (string.IsNullOrEmpty(textBox14.Text) || string.IsNullOrWhiteSpace(textBox14.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле (Дата рождения) не заполненно";
+            }
+            else if (textBox23.Text != textBox19.Text)
+            {
+                label23.Visible = true;
+                label23.Text = "Неверный пароль";
+            }
+            else if (string.IsNullOrEmpty(textBox19.Text) || string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Введите пароль";
+            }
+        }
+        //Изменение.Рег.Номер................................................................................................................................................................................................
+        private async void button8_Click(object sender, EventArgs e)
+        {
+            if (label23.Visible)
+                label23.Visible = false;
+            if (!string.IsNullOrEmpty(textBox20.Text) && !string.IsNullOrWhiteSpace(textBox20.Text) &&
+                !string.IsNullOrEmpty(textBox18.Text) && !string.IsNullOrWhiteSpace(textBox18.Text) && (textBox23.Text == textBox19.Text)
+                && !string.IsNullOrEmpty(textBox19.Text) && !string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                SqlCommand command = new SqlCommand("UPDATE [Abiturient] SET [Number]=@Number WHERE[Id]=@Id", sqlConnection);
+                command.Parameters.AddWithValue("Id", textBox20.Text);
+                command.Parameters.AddWithValue("Number", textBox18.Text);
+                await command.ExecuteNonQueryAsync();
+            }
+            else if (string.IsNullOrEmpty(textBox20.Text) || string.IsNullOrWhiteSpace(textBox20.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле Индефикатора не заполненно";
+            }
+            else if (string.IsNullOrEmpty(textBox18.Text) || string.IsNullOrWhiteSpace(textBox18.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле (Рег.Номер) не заполненно";
+            }
+            else if (textBox23.Text != textBox19.Text)
+            {
+                label23.Visible = true;
+                label23.Text = "Неверный пароль";
+            }
+            else if (string.IsNullOrEmpty(textBox19.Text) || string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Введите пароль";
+            }
+        }
+        //Изменение.Первый экзамен....................................................................................................................................................................................................
+        private async void button9_Click(object sender, EventArgs e)
+        {
+            if (label23.Visible)
+                label23.Visible = false;
+            if (!string.IsNullOrEmpty(textBox20.Text) && !string.IsNullOrWhiteSpace(textBox20.Text) &&
+                !string.IsNullOrEmpty(textBox12.Text) && !string.IsNullOrWhiteSpace(textBox12.Text) && (textBox23.Text == textBox19.Text)
+                && !string.IsNullOrEmpty(textBox19.Text) && !string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                SqlCommand command = new SqlCommand("UPDATE [Abiturient] SET [Examfirst]=@Examfirst WHERE[Id]=@Id", sqlConnection);
+                command.Parameters.AddWithValue("Id", textBox20.Text);
+                command.Parameters.AddWithValue("Examfirst", textBox12.Text);
+                await command.ExecuteNonQueryAsync();
+            }
+            else if (string.IsNullOrEmpty(textBox20.Text) || string.IsNullOrWhiteSpace(textBox20.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле индефикатора не заполненно";
+            }
+            else if (string.IsNullOrEmpty(textBox12.Text)  ||string.IsNullOrWhiteSpace(textBox12.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле (Первый экзамен) не заполненно";
+            }
+            else if (textBox23.Text != textBox19.Text)
+            {
+                label23.Visible = true;
+                label23.Text = "Неверный пароль";
+            }
+            else if (string.IsNullOrEmpty(textBox19.Text) || string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Введите пароль";
+            }
+        }
+        //Изменение.Второй экзамен.....................................................................................................................................................................................................
+        private async void button10_Click(object sender, EventArgs e)
+        {
+            if (label23.Visible)
+                label23.Visible = false;
+            if (!string.IsNullOrEmpty(textBox20.Text) && !string.IsNullOrWhiteSpace(textBox20.Text) &&
+                !string.IsNullOrEmpty(textBox10.Text) && !string.IsNullOrWhiteSpace(textBox10.Text) && (textBox23.Text == textBox19.Text)
+                && !string.IsNullOrEmpty(textBox19.Text) && !string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                SqlCommand command = new SqlCommand("UPDATE [Abiturient] SET [Examsecond]=@Examsecond WHERE[Id]=@Id", sqlConnection);
+                command.Parameters.AddWithValue("Id", textBox20.Text);
+                command.Parameters.AddWithValue("Examsecond", textBox10.Text);
+                await command.ExecuteNonQueryAsync();
+            }
+            else if (string.IsNullOrEmpty(textBox20.Text) || string.IsNullOrWhiteSpace(textBox20.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле индефикатора не заполненно";
+            }
+            else if (string.IsNullOrEmpty(textBox10.Text) || string.IsNullOrWhiteSpace(textBox10.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле (Второй экзамен) не заполненно";
+            }
+            else if (textBox23.Text != textBox19.Text)
+            {
+                label23.Visible = true;
+                label23.Text = "Неверный пароль";
+            }
+            else if (string.IsNullOrEmpty(textBox19.Text) || string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Введите пароль";
+            }
+        }
+        //Изменение.Третий экзамен..............................................................................................................................................................................................
+        private async void button11_Click(object sender, EventArgs e)
+        {
+            if (label23.Visible)
+                label23.Visible = false;
+            if (!string.IsNullOrEmpty(textBox20.Text) && !string.IsNullOrWhiteSpace(textBox20.Text) &&
+                !string.IsNullOrEmpty(textBox11.Text) && !string.IsNullOrWhiteSpace(textBox11.Text) && (textBox23.Text == textBox19.Text)
+                && !string.IsNullOrEmpty(textBox19.Text) && !string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                SqlCommand command = new SqlCommand("UPDATE [Abiturient] SET [Examthird]=@Examthird WHERE[Id]=@Id", sqlConnection);
+                command.Parameters.AddWithValue("Id", textBox20.Text);
+                command.Parameters.AddWithValue("Examthird", textBox11.Text);
+                await command.ExecuteNonQueryAsync();
+            }
+            else if (string.IsNullOrEmpty(textBox20.Text) ||string.IsNullOrWhiteSpace(textBox20.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле индефикатора не заполненно";
+            }
+            else if (string.IsNullOrEmpty(textBox11.Text) ||string.IsNullOrWhiteSpace(textBox11.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле (Третий экзамен) не заполненно";
+            }
+            else if (textBox23.Text != textBox19.Text)
+            {
+                label23.Visible = true;
+                label23.Text = "Неверный пароль";
+            }
+            else if (string.IsNullOrEmpty(textBox19.Text) || string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Введите пароль";
+            }
+        }
+        //Изменение.Балл атестата.............................................................................................................................................................................................
+        private async void button12_Click(object sender, EventArgs e)
+        {
+            if (label23.Visible)
+                label23.Visible = false;
+            if (!string.IsNullOrEmpty(textBox20.Text) && !string.IsNullOrWhiteSpace(textBox20.Text) &&
+                !string.IsNullOrEmpty(textBox13.Text) && !string.IsNullOrWhiteSpace(textBox13.Text) && (textBox23.Text == textBox19.Text)
+                && !string.IsNullOrEmpty(textBox19.Text) && !string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                SqlCommand command = new SqlCommand("UPDATE [Abiturient] SET [Atestat]=@Atestat WHERE[Id]=@Id", sqlConnection);
+                command.Parameters.AddWithValue("Id", textBox20.Text);
+                command.Parameters.AddWithValue("Atestat", textBox13.Text);
+                await command.ExecuteNonQueryAsync();
+            }
+            else if (string.IsNullOrEmpty(textBox20.Text) || string.IsNullOrWhiteSpace(textBox20.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле индефикатора не заполненно";
+            }
+            else if (string.IsNullOrEmpty(textBox13.Text) ||string.IsNullOrWhiteSpace(textBox13.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Поле (Балл атестата) не заполненно";
+            }
+            else if (textBox23.Text != textBox19.Text)
+            {
+                label23.Visible = true;
+                label23.Text = "Неверный пароль";
+            }
+            else if (string.IsNullOrEmpty(textBox19.Text) || string.IsNullOrWhiteSpace(textBox19.Text))
+            {
+                label23.Visible = true;
+                label23.Text = "Введите пароль";
+            }
+        }
+
+        private async void button13_Click(object sender, EventArgs e)
+        {
+            SqlCommand command = new SqlCommand("SELECT[Number],[Secondname]FROM Abiturient WHERE Secondname LIKE 'test'");
+           listBox11.
+        }
+        // добавление пароля.............................................................................................................................................................................................
+        private void button14_Click(object sender, EventArgs e)
+        {
+            if (label37.Visible)
+                label37.Visible = false;
+            if (!string.IsNullOrEmpty(textBox20.Text) && !string.IsNullOrWhiteSpace(textBox20.Text))
+            {
+                SqlCommand command = new SqlCommand("INSERT INTO [Abiturient](Password)VALUES(@Password)", sqlConnection);
+                command.Parameters.AddWithValue("Password", textBox23.Text);
+                label37.Visible = true;
+                label37.Text = "Пароль успешно добавлен";
+            }
+            else if (string.IsNullOrEmpty(textBox23.Text) && string.IsNullOrWhiteSpace(textBox23.Text))
+                {
+                    label37.Visible = true;
+                    label37.Text = "Поле пустое,добавьте пароль";
+                }
+               
+            
+        }
+        //Cправка..................................................................................................................................................................................................................
+        private void button15_Click(object sender, EventArgs e)
+        {
+            Form2 Spravka = new Form2();
+            Spravka.ShowDialog();
+        }
     }
-}
+  }
